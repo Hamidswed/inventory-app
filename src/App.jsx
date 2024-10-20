@@ -6,6 +6,7 @@ import { DarkModeProvier } from "./context/DarkModeContext";
 import ProductList from "./components/ProductList";
 import FilterComponent from "./components/FilterComponent";
 import { filteredSearchTitle, sortCategory, sortDate } from "./utils/functions";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const [categories, setCategories] = useState([]);
@@ -57,12 +58,17 @@ function App() {
 
   return (
     <DarkModeProvier>
+      <Toaster />
       <div className="min-h-screen pb-8">
         <Navbar productsLength={products.length} />
         <div className="container max-w-screen-sm lg:max-w-screen-lg mx-auto flex flex-col gap-8">
           <div className="flex flex-col lg:flex-row gap-4 w-full">
-            <Category setCategories={setCategories} />
-            <Products categories={categories} setProducts={setProducts} />
+            <Category setCategories={setCategories} categories={categories} />
+            <Products
+              categories={categories}
+              setProducts={setProducts}
+              products={products}
+            />
           </div>
           <FilterComponent
             sort={sort}

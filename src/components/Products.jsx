@@ -1,6 +1,7 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 
-function Products({ categories, setProducts }) {
+function Products({ categories, setProducts, products }) {
   const [productForm, setProductForm] = useState({
     title: "",
     quantity: 1,
@@ -19,7 +20,27 @@ function Products({ categories, setProducts }) {
       createdAt: new Date().toISOString(),
       id: new Date().getTime(),
     };
+
+    const productExists = products.some(
+      (product) =>
+        product.title.toLowerCase() === productForm.title.toLowerCase()
+    );
+    if (productExists) {
+      toast.error(`${productForm.title} has been already added!`);
+      return;
+    }
+
+    if (productForm.title === "") {
+      toast.error("Please add a title for product!");
+      return;
+    }
+    if (productForm.categoryId === "") {
+      toast.error("Please add a category for product!");
+      return;
+    }
+
     setProducts((prevState) => [...prevState, newProduct]);
+    toast.success(`${productForm.title} has been added successfully!`);
     setProductForm({ title: "", quantity: 1, categoryId: "" });
   };
 

@@ -43,8 +43,8 @@ export const ProductItem = ({ product, categories, deleteHandler }) => {
 
   return (
     <div className="flex items-center justify-between gap-x-2">
-      <span className="text-secondary-500 flex-1 lg:w-2/3">{product.title}</span>
-      <div className="flex-1 flex items-center justify-between gap-x-4 lg:w-1/3">
+      <span className="text-secondary-500 flex-1">{product.title}</span>
+      <div className="flex-1 flex items-center justify-between gap-x-4">
         {/* date */}
         <span className="text-secondary-400 text-sm lg:text-base">
           {new Date(product.createdAt).toLocaleDateString("en")}
@@ -61,7 +61,7 @@ export const ProductItem = ({ product, categories, deleteHandler }) => {
           {product.quantity}
         </span>
         {/* button */}
-        <div className="flex items-center justify-between gap-x-2">
+        <div className="flex items-center justify-between gap-x-2 lg:gap-x-4">
           <button className="text-primary-900">
             <CiEdit size={25} />
           </button>

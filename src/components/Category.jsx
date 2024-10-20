@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 
-function Category({ setCategories }) {
+function Category({ setCategories, categories }) {
   const [isShow, setIsShow] = useState(false);
   const [categoryForm, setCategoryForm] = useState({
     title: "",
@@ -19,7 +20,21 @@ function Category({ setCategories }) {
       createdAt: new Date().toISOString(),
       id: new Date().getTime(),
     };
+
+    const categoryExists = categories.some(
+      (category) =>
+        category.title.toLowerCase() === categoryForm.title.toLowerCase()
+    );
+    if (categoryExists) {
+      toast.error(`${categoryForm.title} has been already added!`);
+      return;
+    }
+    if (categoryForm.title === "") {
+      toast.error("Please add a category!");
+      return;
+    }
     setCategories((prevState) => [...prevState, newCategory]);
+    toast.success(`${categoryForm.title} has been added successfully!`);
     setCategoryForm({ title: "", description: "" });
   };
 
