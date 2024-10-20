@@ -1,12 +1,38 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-function Products({ categories, setProducts, products }) {
+function Products({
+  categories,
+  setProducts,
+  products,
+  projectToEdit = {},
+  onClose = () => {},
+}) {
   const [productForm, setProductForm] = useState({
     title: "",
     quantity: 1,
     categoryId: "",
   });
+
+  const { id: editId } = projectToEdit;
+  const isEditSession = Boolean(editId);
+
+  useEffect(() => {
+    if (isEditSession) {
+      setProductForm({
+        title: projectToEdit.title || "",
+        quantity: projectToEdit.quantity || 1,
+        categoryId: projectToEdit.categoryId || "",
+      });
+    } else {
+      setProductForm({ title: "", quantity: 1, categoryId: "" }); // ریست کردن فرم برای حالت جدید
+    }
+  }, [
+    isEditSession,
+    projectToEdit.title,
+    projectToEdit.quantity,
+    projectToEdit.categoryId,
+  ]);
 
   const changeHandler = ({ target }) => {
     const { name, value } = target;
@@ -15,33 +41,49 @@ function Products({ categories, setProducts, products }) {
 
   const addNewProductHandler = (e) => {
     e.preventDefault();
-    const newProduct = {
-      ...productForm,
-      createdAt: new Date().toISOString(),
-      id: new Date().getTime(),
-    };
 
-    const productExists = products.some(
-      (product) =>
-        product.title.toLowerCase() === productForm.title.toLowerCase()
-    );
-    if (productExists) {
-      toast.error(`${productForm.title} has been already added!`);
-      return;
-    }
+    if (isEditSession) {
+      const updatedProduct = {
+        ...projectToEdit,
+        ...productForm,
+      };
 
-    if (productForm.title === "") {
-      toast.error("Please add a title for product!");
-      return;
-    }
-    if (productForm.categoryId === "") {
-      toast.error("Please add a category for product!");
-      return;
-    }
+      setProducts((prevState) =>
+        prevState.map((product) =>
+          product.id === editId ? updatedProduct : product
+        )
+      );
+      toast.success(`${productForm.title} has been updated successfully!`);
+      onClose();
+    } else {
+      const newProduct = {
+        ...productForm,
+        createdAt: new Date().toISOString(),
+        id: new Date().getTime(),
+      };
 
-    setProducts((prevState) => [...prevState, newProduct]);
-    toast.success(`${productForm.title} has been added successfully!`);
-    setProductForm({ title: "", quantity: 1, categoryId: "" });
+      const productExists = products.some(
+        (product) =>
+          product.title.toLowerCase() === productForm.title.toLowerCase()
+      );
+      if (productExists) {
+        toast.error(`${productForm.title} has been already added!`);
+        return;
+      }
+
+      if (!productForm.title) {
+        toast.error("Please add a title for product!");
+        return;
+      }
+      if (!productForm.categoryId) {
+        toast.error("Please add a category for product!");
+        return;
+      }
+
+      setProducts((prevState) => [...prevState, newProduct]);
+      toast.success(`${productForm.title} has been added successfully!`);
+      setProductForm({ title: "", quantity: 1, categoryId: "" });
+    }
   };
 
   return (
@@ -121,7 +163,7 @@ function Products({ categories, setProducts, products }) {
             className="btn btn--primary w-full"
             onClick={addNewProductHandler}
           >
-            Add new product
+            {isEditSession ? "Submit" : "Add new product"}
           </button>
         </div>
       </form>

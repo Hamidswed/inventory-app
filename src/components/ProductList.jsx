@@ -1,12 +1,32 @@
+import toast from "react-hot-toast";
 import { CiEdit, CiTrash } from "react-icons/ci";
+import Modal from "../ui/Modal";
+import { useState } from "react";
+import Products from "./Products";
 
 function ProductList({ products, categories, setProducts }) {
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [projectToEdit, setProjectToEdit] = useState(null);
+
   const deleteHandler = (productId) => {
     const filteredProducts = products.filter(
       (product) => product.id !== parseInt(productId)
     );
+    const deletedProduct = products.find(
+      (product) => product.id === parseInt(productId)
+    );
     setProducts(filteredProducts);
+    toast.success(`${deletedProduct.title} has been deleted successfully!`);
   };
+
+  const editHandler = (productId) => {
+    setIsOpenModal(true);
+    const productToEdit = products.find(
+      (product) => product.id === parseInt(productId)
+    );
+    setProjectToEdit(productToEdit);
+  };
+
   if (products.length === 0)
     return (
       <div className="text-secondary-700 mx-auto text-lg">
@@ -26,17 +46,36 @@ function ProductList({ products, categories, setProducts }) {
               product={product}
               categories={categories}
               deleteHandler={deleteHandler}
+              editHandler={editHandler}
             />
           );
         })}
       </div>
+      <Modal
+        title={projectToEdit.title}
+        open={isOpenModal}
+        onClose={() => setIsOpenModal(false)}
+      >
+        <Products
+          categories={categories}
+          setProducts={setProducts}
+          products={products}
+          projectToEdit={projectToEdit}
+          onClose={() => setIsOpenModal(false)}
+        />
+      </Modal>
     </div>
   );
 }
 
 export default ProductList;
 
-export const ProductItem = ({ product, categories, deleteHandler }) => {
+export const ProductItem = ({
+  product,
+  categories,
+  deleteHandler,
+  editHandler,
+}) => {
   const foundedCategory = categories.find(
     (category) => category.id === parseInt(product.categoryId)
   );
@@ -62,7 +101,10 @@ export const ProductItem = ({ product, categories, deleteHandler }) => {
         </span>
         {/* button */}
         <div className="flex items-center justify-between gap-x-2 lg:gap-x-4">
-          <button className="text-primary-900">
+          <button
+            className="text-primary-900"
+            onClick={() => editHandler(product.id)}
+          >
             <CiEdit size={25} />
           </button>
           <button
