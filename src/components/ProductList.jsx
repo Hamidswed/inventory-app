@@ -52,7 +52,7 @@ function ProductList({ products, categories, setProducts }) {
         })}
       </div>
       <Modal
-        title={projectToEdit.title}
+        title={projectToEdit?.title}
         open={isOpenModal}
         onClose={() => setIsOpenModal(false)}
       >
