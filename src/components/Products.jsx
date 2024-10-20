@@ -25,7 +25,7 @@ function Products({
         categoryId: projectToEdit.categoryId || "",
       });
     } else {
-      setProductForm({ title: "", quantity: 1, categoryId: "" }); // ریست کردن فرم برای حالت جدید
+      setProductForm({ title: "", quantity: 1, categoryId: "" });
     }
   }, [
     isEditSession,
@@ -101,7 +101,7 @@ function Products({
           </label>
           <input
             type="text"
-            placeholder="product title ..."
+            placeholder="Add a title ..."
             name="title"
             id="product-title"
             value={productForm.title}

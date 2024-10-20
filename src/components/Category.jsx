@@ -65,6 +65,7 @@ function Category({ setCategories, categories }) {
               type="text"
               name="title"
               id="category-title"
+              placeholder="Add a title..."
               value={categoryForm.title}
               onChange={changeHandler}
               className="bg-transparent rounded-xl border border-secondary-500 text-secondary-700"
@@ -81,6 +82,7 @@ function Category({ setCategories, categories }) {
               type="text"
               name="description"
               id="category-description"
+              placeholder="Add adescription..."
               value={categoryForm.description}
               onChange={changeHandler}
               className="bg-transparent rounded-xl border border-secondary-500 text-secondary-700 w-full"
