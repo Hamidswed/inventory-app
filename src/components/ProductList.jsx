@@ -6,17 +6,17 @@ import Products from "./Products";
 
 function ProductList({ products, categories, setProducts }) {
   const [isOpenModal, setIsOpenModal] = useState(false);
+  const [isOpenDelete, setIsOpenDelete] = useState(false);
   const [projectToEdit, setProjectToEdit] = useState(null);
+  const [projectToDelete, setProjectToDelete] = useState(null);
 
-  const deleteHandler = (productId) => {
+  const deleteHandler = () => {
     const filteredProducts = products.filter(
-      (product) => product.id !== parseInt(productId)
-    );
-    const deletedProduct = products.find(
-      (product) => product.id === parseInt(productId)
+      (product) => product.id !== parseInt(projectToDelete.id)
     );
     setProducts(filteredProducts);
-    toast.success(`${deletedProduct.title} has been deleted successfully!`);
+    setIsOpenDelete(false);
+    toast.success(`${projectToDelete.title} has been deleted successfully!`);
   };
 
   const editHandler = (productId) => {
@@ -47,12 +47,14 @@ function ProductList({ products, categories, setProducts }) {
               categories={categories}
               deleteHandler={deleteHandler}
               editHandler={editHandler}
+              setIsOpenDelete={setIsOpenDelete}
+              setProjectToDelete={setProjectToDelete}
             />
           );
         })}
       </div>
       <Modal
-        title={projectToEdit?.title}
+        title={`Edit - ${projectToEdit?.title}`}
         open={isOpenModal}
         onClose={() => setIsOpenModal(false)}
       >
@@ -64,6 +66,32 @@ function ProductList({ products, categories, setProducts }) {
           onClose={() => setIsOpenModal(false)}
         />
       </Modal>
+      <Modal
+        open={isOpenDelete}
+        onClose={() => setIsOpenDelete(false)}
+        title={`Delete - ${projectToDelete?.title}`}
+      >
+        <div>
+          <h2 className="font-bold text-secondary-700">
+            <span>Do you want to delete&nbsp;</span>
+            <span className="text-red-500">{projectToDelete?.title}</span>?
+          </h2>
+          <div className="flex items-center justify-center gap-x-4 mt-4">
+            <button
+              className="btn btn--primary w-full"
+              onClick={() => setIsOpenDelete(false)}
+            >
+              No
+            </button>
+            <button
+              className="btn btn--secondary w-full"
+              onClick={deleteHandler}
+            >
+              Yes
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }
@@ -73,12 +101,17 @@ export default ProductList;
 export const ProductItem = ({
   product,
   categories,
-  deleteHandler,
   editHandler,
+  setIsOpenDelete,
+  setProjectToDelete,
 }) => {
   const foundedCategory = categories.find(
     (category) => category.id === parseInt(product.categoryId)
   );
+  const openDeleteHandler = () => {
+    setIsOpenDelete(true);
+    setProjectToDelete(product);
+  };
 
   return (
     <div className="flex items-center justify-between gap-x-2">
@@ -107,10 +140,7 @@ export const ProductItem = ({
           >
             <CiEdit size={25} />
           </button>
-          <button
-            className="text-red-500"
-            onClick={() => deleteHandler(product.id)}
-          >
+          <button className="text-red-500" onClick={openDeleteHandler}>
             <CiTrash size={25} />
           </button>
         </div>

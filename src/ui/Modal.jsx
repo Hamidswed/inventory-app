@@ -23,7 +23,7 @@ function Modal({ open, onClose, title, children }) {
           border-b-secondary-300 pb-2 mb-6"
           >
             <p className="text-secondary-700 font-bold text-base">
-              Edit - {title}
+              {title}
             </p>
             <button onClick={onClose}>
               <HiOutlineX className="w-5 h-5 text-secondary-500" />
