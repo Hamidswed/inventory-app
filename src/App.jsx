@@ -43,7 +43,7 @@ function App() {
       JSON.parse(localStorage.getItem("categories")) || [];
     setProducts(savedProducts);
     setCategories(savedCategories);
-  }, [categoryId]);
+  }, []);
 
   useEffect(() => {
     if (products.length) {

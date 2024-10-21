@@ -10,10 +10,12 @@ function ProductList({ products, categories, setProducts }) {
   const [projectToEdit, setProjectToEdit] = useState(null);
   const [projectToDelete, setProjectToDelete] = useState(null);
 
+  console.log("Project to delete", projectToDelete);
   const deleteHandler = () => {
     const filteredProducts = products.filter(
       (product) => product.id !== parseInt(projectToDelete.id)
     );
+    console.log("filtered product after delete",filteredProducts);
     setProducts(filteredProducts);
     setIsOpenDelete(false);
     toast.success(`${projectToDelete.title} has been deleted successfully!`);
