@@ -15,6 +15,6 @@ export const sortDate = (array, value) => {
 
 export const sortCategory = (array, value) => {
   let sortedProducts = [...array];
-  if (!value) return sortedProducts;
+  if (!value || value === "All") return sortedProducts;
   return sortedProducts.filter((item) => item.categoryId == value);
 };
