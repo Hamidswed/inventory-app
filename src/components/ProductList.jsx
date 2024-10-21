@@ -38,7 +38,7 @@ function ProductList({ products, categories, setProducts }) {
       <h2 className="text-xl text-secondary-700 font bold mb-2">
         Product List
       </h2>
-      <div className="flex flex-col gap-4 bg-secondary-0 shadow-lg p-4 rounded-xl overflow-x-auto w-full">
+      <div className="flex flex-col gap-4 bg-secondary-0 shadow-lg p-4 rounded-xl overflow-x-auto min-w-[400px] w-full">
         {products.map((product) => {
           return (
             <ProductItem

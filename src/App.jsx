@@ -13,7 +13,7 @@ function App() {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [sort, setSort] = useState("latest");
-  const [categoryId, setCategoryId] = useState("All");
+  const [categoryId, setCategoryId] = useState("");
   const [searchValue, setSearchValue] = useState("");
 
   useEffect(() => {
@@ -21,6 +21,7 @@ function App() {
     result = filteredSearchTitle(result, searchValue);
     result = sortDate(result, sort);
     result = sortCategory(result, categoryId);
+    console.log("result", result);
     setFilteredProducts(result);
   }, [products, sort, searchValue, categoryId]);
 
@@ -42,7 +43,7 @@ function App() {
       JSON.parse(localStorage.getItem("categories")) || [];
     setProducts(savedProducts);
     setCategories(savedCategories);
-  }, []);
+  }, [categoryId]);
 
   useEffect(() => {
     if (products.length) {

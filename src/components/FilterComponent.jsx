@@ -60,7 +60,7 @@ function FilterComponent({
           value={categoryId}
           className="bg-transparent rounded-xl border border-secondary-500 text-secondary-700 w-full"
         >
-          <option className="bg-secondary-0 text-secondary-700" value="All">
+          <option className="bg-secondary-0 text-secondary-700" value="">
             All
           </option>
           {categories.map((category) => {
