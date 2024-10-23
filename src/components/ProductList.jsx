@@ -1,21 +1,25 @@
 import toast from "react-hot-toast";
 import Modal from "../ui/Modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Products from "./Products";
 import { ProductItem } from "./ProductItem";
 
-function ProductList({ products, categories, setProducts }) {
+function ProductList({ resultProducts, categories, setProducts }) {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isOpenDelete, setIsOpenDelete] = useState(false);
   const [projectToEdit, setProjectToEdit] = useState(null);
   const [projectToDelete, setProjectToDelete] = useState(null);
+  const [productList, setProductList] = useState([]);
 
-  console.log("Project to delete", projectToDelete);
+  useEffect(() => {
+    const savedProducts = JSON.parse(localStorage.getItem("products"));
+    setProductList(savedProducts);
+  }, [resultProducts]);
+
   const deleteHandler = () => {
-    const filteredProducts = products.filter(
+    const filteredProducts = productList.filter(
       (product) => product.id !== parseInt(projectToDelete.id)
     );
-    console.log("filtered product after delete", filteredProducts);
     setProducts(filteredProducts);
     setIsOpenDelete(false);
     toast.success(`${projectToDelete.title} has been deleted successfully!`);
@@ -24,13 +28,13 @@ function ProductList({ products, categories, setProducts }) {
 
   const editHandler = (productId) => {
     setIsOpenModal(true);
-    const productToEdit = products.find(
+    const productToEdit = resultProducts.find(
       (product) => product.id === parseInt(productId)
     );
     setProjectToEdit(productToEdit);
   };
 
-  if (products.length === 0)
+  if (resultProducts.length === 0)
     return (
       <div className="text-secondary-700 mx-auto text-lg">
         There is no product!
@@ -42,7 +46,7 @@ function ProductList({ products, categories, setProducts }) {
         Product List
       </h2>
       <div className="flex flex-col gap-4 bg-secondary-0 shadow-lg p-4 rounded-xl min-w-[400px]">
-        {products.map((product) => {
+        {resultProducts.map((product) => {
           return (
             <ProductItem
               key={product.id}
@@ -64,7 +68,7 @@ function ProductList({ products, categories, setProducts }) {
         <Products
           categories={categories}
           setProducts={setProducts}
-          products={products}
+          products={resultProducts}
           projectToEdit={projectToEdit}
           onClose={() => setIsOpenModal(false)}
         />

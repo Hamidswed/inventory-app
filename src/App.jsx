@@ -21,7 +21,6 @@ function App() {
     result = filteredSearchTitle(result, searchValue);
     result = sortDate(result, sort);
     result = sortCategory(result, categoryId);
-    console.log("result", result);
     setFilteredProducts(result);
   }, [products, sort, searchValue, categoryId]);
 
@@ -81,7 +80,7 @@ function App() {
             categoryHandler={categoryHandler}
           />
           <ProductList
-            products={filteredProducts}
+            resultProducts={filteredProducts}
             categories={categories}
             setProducts={setProducts}
           />
